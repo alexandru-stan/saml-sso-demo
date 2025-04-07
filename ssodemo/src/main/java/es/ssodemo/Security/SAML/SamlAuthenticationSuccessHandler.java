@@ -1,5 +1,7 @@
 package es.ssodemo.Security.SAML;
 import java.io.IOException;
+import java.util.logging.Logger;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
@@ -12,11 +14,14 @@ import jakarta.servlet.http.HttpServletResponse;
 
 
 public class SamlAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
-
+	Logger logger;
     private RedirectStrategy REDIRECT = new DefaultRedirectStrategy();
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
-        AuthenticationSuccessHandler.super.onAuthenticationSuccess(request, response, chain, authentication);
+  
+    	AuthenticationSuccessHandler.super.onAuthenticationSuccess(request, response, chain, authentication);
+  
+        
     }
 
     
@@ -25,6 +30,8 @@ public class SamlAuthenticationSuccessHandler implements AuthenticationSuccessHa
     
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        REDIRECT.sendRedirect(request, response,"/home");
+       System.out.println();
+    	REDIRECT.sendRedirect(request, response,(String) request.getSession().getAttribute("RelayState"));
+    
     }
 }
